@@ -65,13 +65,12 @@ const sidebar = createSideBar(getSidebarMapObject);
 const articlesNavItem = createArticlesNavItem(getSidebarMapObject);
 module.exports = {
   base: "/blog/",
-  title: "前端技术积累",
-  description:
-    "该博客主要是用来记录自己的学习笔记，对自己的学习历程进行一个简单的记录，也会写一些深入总结性的博客。",
+  title: "吾日三省吾身",
+  description: "记录，学习，思考",
   markdown: {
     lineNumbers: true, // 代码块显示行号
   },
-  port: 8002,
+  port: 8888,
   themeConfig: {
     // 你的GitHub仓库，请正确填写
     repo: "https://github.com/adodo8029/myblog",
