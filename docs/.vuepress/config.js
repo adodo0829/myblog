@@ -100,7 +100,7 @@ module.exports = {
   hot: true,
   themeConfig: {
     // 你的GitHub仓库，请正确填写
-    repo: "https://github.com/adodo8029/blogs",
+    repo: "https://github.com/adodo0829",
     // 自定义仓库链接文字。
     repoLabel: "GitHub",
     nav: [
