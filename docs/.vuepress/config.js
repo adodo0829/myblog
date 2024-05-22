@@ -2,12 +2,17 @@ const fs = require("fs");
 const path = require("path");
 const join = path.join;
 const resolve = path.resolve;
-const pathName = "articles";
+
+const articlesPath = "articles";
+const bussinessPath = "bussiness";
 
 //创建文件夹和文件的映射
-function createSidebarMapObject(dir) {
+function createSidebarMapObject(dirPath) {
   let fileMapObj = {};
-  const temPath = resolve(__dirname, "..", dir);
+  const temPath = resolve(__dirname, "..", dirPath);
+
+  console.log("temPath", temPath);
+
   function getAllFiles(curPath) {
     const files = fs.readdirSync(curPath);
     files.forEach(function(file, index) {
@@ -32,14 +37,15 @@ function createSidebarMapObject(dir) {
   getAllFiles(temPath);
   return fileMapObj;
 }
-function getLink(link) {
+
+function getLink(link, pathName) {
   let tempLink = link.replace(/\\/g, "/");
   const index = tempLink.indexOf(pathName);
   tempLink = tempLink.slice(index - 1) + "/";
   return tempLink;
 }
 
-function createArticlesNavItem(fileMapObj) {
+function createArticlesNavItem(fileMapObj, pathName) {
   let navItem = [];
   Object.keys(fileMapObj).forEach(function(title) {
     let tempTitle = title.replace(/\\/g, "/");
@@ -52,28 +58,49 @@ function createArticlesNavItem(fileMapObj) {
 
   return navItem;
 }
-function createSideBar(fileMapObj) {
+function createSideBar(fileMapObj, path) {
   const sidebar = {};
   Object.keys(fileMapObj).forEach(function(key) {
-    const link = getLink(key);
+    const link = getLink(key, path);
     sidebar[link] = fileMapObj[key];
   });
   return sidebar;
 }
-const getSidebarMapObject = createSidebarMapObject(pathName);
-const sidebar = createSideBar(getSidebarMapObject);
-const articlesNavItem = createArticlesNavItem(getSidebarMapObject);
+
+// articles list
+const artSidebarMapObject = createSidebarMapObject(articlesPath);
+
+const artSidebar = createSideBar(artSidebarMapObject, articlesPath);
+const articlesNavItem = createArticlesNavItem(
+  artSidebarMapObject,
+  articlesPath
+);
+
+// bus list
+const busSidebarMapObject = createSidebarMapObject(bussinessPath);
+
+const busSidebar = createSideBar(busSidebarMapObject, bussinessPath);
+const busNavItem = createArticlesNavItem(busSidebarMapObject, bussinessPath);
+
+const sidebar = {
+  ...artSidebar,
+  ...busSidebar,
+};
+
+console.log('sidebar',sidebar);
+
 module.exports = {
-  base: "/blog/",
+  base: "/blogs/",
   title: "吾日三省吾身",
   description: "记录，学习，思考",
   markdown: {
     lineNumbers: true, // 代码块显示行号
   },
   port: 8888,
+  hot: true,
   themeConfig: {
     // 你的GitHub仓库，请正确填写
-    repo: "https://github.com/adodo8029/myblog",
+    repo: "https://github.com/adodo8029/blogs",
     // 自定义仓库链接文字。
     repoLabel: "GitHub",
     nav: [
@@ -82,7 +109,7 @@ module.exports = {
         text: "技术相关",
         items: articlesNavItem,
       },
-      // { text: '关于', link: '/about/' },
+      { text: "业务相关", items: busNavItem },
       { text: "标签", link: "/tags/" },
     ],
     sidebar,
